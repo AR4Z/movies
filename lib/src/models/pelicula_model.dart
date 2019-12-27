@@ -62,4 +62,12 @@ class Pelicula {
     overview = json['overview'];
     releaseDate = json['release_date'];
   }
+
+  String getPosterImg() {
+    if(posterPath == null) {
+      return 'https://worldfoodtravel.org/wp-content/uploads/2019/06/no-image.jpg';
+    }
+    return 'https://image.tmdb.org/t/p/w500/$posterPath';
+
+  }
 }

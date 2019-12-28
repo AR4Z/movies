@@ -3,26 +3,31 @@ import 'package:movies/src/models/pelicula_model.dart';
 
 class MovieHorizontal extends StatelessWidget {
   final List<Pelicula> peliculas;
-  MovieHorizontal({ @required this.peliculas });
+  final Function siguientePagina;
+
+  MovieHorizontal({@required this.peliculas, @required this.siguientePagina});
+  final _pageController = new PageController(viewportFraction: 0.3, initialPage: 1);
 
   @override
   Widget build(BuildContext context) {
     final _screenSize = MediaQuery.of(context).size;
 
+    _pageController.addListener(() {
+      if(_pageController.position.pixels >= _pageController.position.maxScrollExtent - 200) {
+        siguientePagina();
+      }
+    });
+
     return Container(
-      height: _screenSize.height * 0.2,
-      child: PageView(
-        pageSnapping: false,
-        children: _tarjetas(),
-        controller: PageController(
-          viewportFraction: 0.3,
-          initialPage: 1
-        ),
-      )
-    );
+        height: _screenSize.height * 0.3,
+        child: PageView(
+          pageSnapping: false,
+          children: _tarjetas(context),
+          controller: _pageController,
+        ));
   }
 
-  List<Widget> _tarjetas() {
+  List<Widget> _tarjetas(BuildContext context) {
     return peliculas.map((movie) {
       return Container(
         margin: EdgeInsets.only(right: 15.0),
@@ -34,10 +39,14 @@ class MovieHorizontal extends StatelessWidget {
                 image: NetworkImage(movie.getPosterImg()),
                 placeholder: AssetImage('assets/img/no-image.jpg'),
                 fit: BoxFit.cover,
-    height: 160.0,
+                height: 160.0,
               ),
-            )
-    ],
+            ),
+            SizedBox(height: 5.0,),
+            Text(movie.title,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.caption),
+          ],
         ),
       );
     }).toList();

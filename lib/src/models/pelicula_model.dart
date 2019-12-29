@@ -70,4 +70,11 @@ class Pelicula {
     return 'https://image.tmdb.org/t/p/w500/$posterPath';
 
   }
+
+  String getBackgroundImg() {
+    if(backdropPath == null) {
+      return 'https://worldfoodtravel.org/wp-content/uploads/2019/06/no-image.jpg';
+    }
+    return 'https://image.tmdb.org/t/p/w500/$backdropPath';
+  }
 }
